@@ -22,13 +22,14 @@ int main()
     "one", "two", "three", "for you", "chair", "cheers", "can we start", "look at you",
     "kiss", "i'm sorry", "bottom", "stop"}; //words to be translated into minion
 
+    //char * filename;
     string minion[] = {"Bello", "Poopaye", "Bank yu", "Me want banana",
     "Underwear", "Bee Do! Bee Do! Bee Do! Bee Do!", "Tatata bala tu", "Baboi", "Po ka", "Bable", "Gelato", "Butt",
     "Nah", "Dul", "Sae", "Para tu", "Chasy", "Kan pai", "Pwede na", "Luk at tu",
     "Muak Muak", "Ditto", "Buttom", "Stopa"}; //minion translation
-
+    //cout<<"Enter a file to translate: "<<endl;
+    //cin>>filename;
     string file_words = "";
-
     if (read_file("text.txt", words)) //take entire file to translate and put it into the vector words
     {
         for (int k = 0; k< words.size(); k++)
@@ -40,24 +41,29 @@ int main()
     {
         cout<<"Issue opening the file\n"; //if we cannot read in the file let the user know there was an issue
     }
-    temp_word2=file_words.c_str(); //to make const char*
+    temp_word2=file_words.c_str();//to make const char*
+    const char * temp_word3;
     size_t j = 0; //starting point for each search
     int num = strlen(temp_word2); //last index of strlen that we will search up till
     int i = 0;
          while(i<24) //search for every english word
         {
+            temp_word3 = english[i].c_str();
+            //cout << i << endl; cout.flush();
             while (j<num) //search until end of string
             {
                 index = file_words.find(english[i], j); //starting from the last find point, search for current english word
-                if (index != -1 && temp_word2[index-1]=='  ')//strcmp(temp_word2[index - 1], " ") !=0)
+                if (index != -1 && (temp_word2[index-1]==' ' || temp_word2[index-1]=='"' || temp_word2[index-1]== '“') && (temp_word2[index + strlen(temp_word3)] == ' ' || temp_word2[index + strlen(temp_word3)] == '"' || temp_word2[index + strlen(temp_word3)] == '“' || temp_word2[index + strlen(temp_word3)] =='\'' || temp_word2[index + strlen(temp_word3)] =='’'))// && temp_word2[index-1]=='  ')      //strcmp(temp_word2[index - 1], " ") !=0)
                 {
                     temp_word = english[i].c_str(); //make english word a const char *
                     file_words.replace(index, strlen(temp_word), minion[i]); // replace english word with minion word
                     j = index; //change search start point to last found point
+                    temp_word2=file_words.c_str();
                 }
                 else
                 {
-                    j = num; //make search start point the end of the string
+                    j++;
+                    //j = num; //make search start point the end of the string
                 }
             }
             j = 0; //reset search start point to beginning of string
